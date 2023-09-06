@@ -23,3 +23,7 @@ Passport Local strategy for user authentication.
 
 Enjoy 🎉🎉
 
+
+
+-PS Use for learning or your portfolio. Developed in accordance with coursework's curriculum. Please reach out for further details.
+
