@@ -1,5 +1,8 @@
 //jshint esversion:6
 
+
+
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
@@ -10,13 +13,12 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-find-or-create');
 const nodemailer = require('nodemailer');
-require('dotenv').config();
-
-
+const dotenv = require('dotenv').config();
 const uuid = require('uuid');
-
-//Acquiring mongoose 
 const mongoose = require('mongoose');
+
+
+
 
 const homeStartingContent = "Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.";
 const aboutContent = "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
@@ -25,8 +27,8 @@ const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rho
 
 
 
-//Connecting mongoose to mongoDb and creating a blogDB database
-mongoose.connect('mongodb+srv://devesh-admin:${process.env.PASSWORD}@cluster0.yjqirxx.mongodb.net/blogDB', {
+//Connecting mongoose to mongoDb cloud native server and creating a blogDB database
+mongoose.connect(`mongodb+srv://devesh-admin:${process.env.PASSWORD}@cluster0.yjqirxx.mongodb.net/blogDB`, {
     useNewUrlParser: true
 });
 
@@ -44,7 +46,8 @@ let token = "";
 for(var i = 0; i <= 10 ; i++){
     token = token + characters[Math.floor(Math.random() * characters.length)]
 };
-console.log(token);   
+console.log(token);
+
 
 const userSchema = new mongoose.Schema ({
     username:String,
@@ -60,8 +63,8 @@ const userSchema = new mongoose.Schema ({
 var transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "vishaldevesh544@gmail.com",
-    pass: "Qwerty123!@",
+    user: `${process.env.user}`,
+    pass: `${process.env.pass}`,
   },
 });
 
@@ -105,10 +108,13 @@ app.use(passport.session()); //Use session as well.
 
 
 
-
+//ToDo
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+
+
 
 
 //passport.serializeUser(function(user,done){
@@ -122,10 +128,12 @@ passport.deserializeUser(User.deserializeUser());
 //});
 
 
+
+
 //Implementation of Google OAuth Sign In.
 passport.use(new GoogleStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
+    clientID: `${process.env.CLIENT_ID}`,
+    clientSecret: `${process.env.CLIENT_SECRET}`,
     callbackURL: "http://localhost:3000/auth/google/journal",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
@@ -135,6 +143,7 @@ passport.use(new GoogleStrategy({
     });
   }
 ));
+
 
 
 
